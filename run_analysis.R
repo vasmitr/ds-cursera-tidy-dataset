@@ -7,11 +7,6 @@ if (!file.exists("data")) {
   dir.create("data")
 }
 
-download.file(
-"https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip", destfile = "data/wearable.zip")
-
-unzip("data/wearable.zip", overwrite = T, exdir = "data")
-
 setwd('data/UCI HAR Dataset/')
 
 # get variable names
@@ -58,12 +53,13 @@ test_data <- mergeDatasets(x_test, y_test, subject_test)
 # combined dataset
 data <- rbind(train_data, test_data)
 
+
 # summary by test subject and activity
 summary <- data %>%
   group_by(subject, activity) %>%
   summarise(across(everything(), list(mean = mean, sd = sd)), .groups = "drop")
 
-
+write.table(summary, file = "summary.txt", row.name=FALSE)
 
 
 
